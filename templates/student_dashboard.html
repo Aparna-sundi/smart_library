@@ -1,0 +1,169 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Library - Student Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <h2>📚 Smart Library</h2>
+
+        <a href="{{ url_for('student_dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('student_books') }}">📖 Browse Books</a>
+        <a href="{{ url_for('wishlist') }}">❤️ My Wishlist</a>
+        <a href="{{ url_for('student_notifications') }}">🔔 My Notifications</a>
+        <a href="{{ url_for('scan_book') }}">🔍 Scan QR Code</a>
+        <a href="{{ url_for('my_requests') }}">📋 My Requests</a>
+        <a href="{{ url_for('issued_books') }}">📚 My Issued Books</a>
+        <a href="{{ url_for('student_profile') }}">👤 My Profile</a>
+        <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <!-- Welcome Section -->
+        <div class="student-welcome">
+
+            <h1>👋 Welcome, {{ session['name'] }}!</h1>
+
+            <p>
+                Welcome to your Smart Library.
+                Discover books, manage your borrowing activities
+                and explore new knowledge.
+            </p>
+
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Student Activities -->
+        <h2 class="student-section-title">
+            📌 Student Activities
+        </h2>
+
+        <div class="admin-actions">
+
+            <a href="{{ url_for('student_books') }}"
+               class="admin-action-card">
+                <span>📖</span>
+                <strong>Browse Books</strong>
+                <small>Explore books available in the library.</small>
+            </a>
+
+            <a href="{{ url_for('wishlist') }}"
+               class="admin-action-card">
+                <span>❤️</span>
+                <strong>My Wishlist</strong>
+                <small>View your favourite saved books.</small>
+            </a>
+
+            <a href="{{ url_for('student_notifications') }}"
+               class="admin-action-card">
+                <span>🔔</span>
+                <strong>My Notifications</strong>
+                <small>Check important library updates.</small>
+            </a>
+
+            <a href="{{ url_for('scan_book') }}"
+               class="admin-action-card">
+                <span>🔍</span>
+                <strong>Scan QR Code</strong>
+                <small>Scan a book QR code to view its details.</small>
+            </a>
+
+            <a href="{{ url_for('my_requests') }}"
+               class="admin-action-card">
+                <span>📋</span>
+                <strong>My Requests</strong>
+                <small>Check your borrowing request status.</small>
+            </a>
+
+            <a href="{{ url_for('issued_books') }}"
+               class="admin-action-card">
+                <span>📚</span>
+                <strong>My Issued Books</strong>
+                <small>View and manage your issued books.</small>
+            </a>
+
+            <a href="{{ url_for('student_profile') }}"
+               class="admin-action-card">
+                <span>👤</span>
+                <strong>My Profile</strong>
+                <small>View your personal information and history.</small>
+            </a>
+
+        </div>
+
+        <!-- Recommended Books -->
+        <div class="book-section student-recommendations">
+
+            <h2>✨ Recommended Books for You</h2>
+
+            <p>Explore books selected for your interests.</p>
+
+            {% if recommended_books %}
+
+                <div class="admin-actions">
+
+                    {% for book in recommended_books %}
+
+                        <div class="admin-action-card">
+
+                            <span>📚</span>
+
+                            <strong>{{ book['title'] }}</strong>
+
+                            <small>
+                                Author: {{ book['author'] }}
+                            </small>
+
+                            <small>
+                                Category: {{ book['category'] }}
+                            </small>
+
+                            <small>
+                                Available Copies: {{ book['available'] }}
+                            </small>
+
+                            <a href="{{ url_for('student_books') }}"
+                               class="student-explore-btn">
+                                Explore Books →
+                            </a>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+
+            {% else %}
+
+                <p>No recommendations available right now.</p>
+
+            {% endif %}
+
+        </div>
+
+        <!-- Footer -->
+        <footer class="dashboard-footer">
+            © 2026 Smart Library | Student Dashboard
+        </footer>
+
+    </div>
+
+</body>
+</html>

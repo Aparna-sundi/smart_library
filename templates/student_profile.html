@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Student Profile - Smart Library</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>📚 Smart Library</h2>
+
+        <a href="{{ url_for('student_dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('student_books') }}">📖 Browse Books</a>
+        <a href="{{ url_for('my_requests') }}">📋 My Requests</a>
+        <a href="{{ url_for('issued_books') }}">📚 My Issued Books</a>
+        <a href="{{ url_for('student_profile') }}">👤 My Profile</a>
+        <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <h1>👤 Student Profile</h1>
+
+        <p style="color:#64748b; margin-bottom:25px;">
+            Manage your personal information and library activities.
+        </p>
+
+        <!-- Personal Information -->
+        <div class="book-section">
+
+            <h2>Personal Information</h2>
+
+            <p><strong>Student ID:</strong> {{ student.id }}</p>
+            <p><strong>Name:</strong> {{ student.name }}</p>
+            <p><strong>Email:</strong> {{ student.email }}</p>
+
+        </div>
+
+        <!-- Library Statistics -->
+        <h2 style="margin-top:30px;">📊 My Library Statistics</h2>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h3>📚 Total Borrowed</h3>
+                <h2>{{ total_borrowed }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>📖 Currently Issued</h3>
+                <h2>{{ currently_issued }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>✅ Returned Books</h3>
+                <h2>{{ returned_books }}</h2>
+            </div>
+
+        </div>
+
+        <!-- Borrowing History -->
+        <div class="book-section">
+
+            <h2>📋 Borrowing History</h2>
+
+            <div class="table-container">
+
+                <table>
+
+                    <thead>
+                        <tr>
+                            <th>Book</th>
+                            <th>Author</th>
+                            <th>Issue Date</th>
+                            <th>Due Date</th>
+                            <th>Return Date</th>
+                            <th>Fine</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                        {% for book in history %}
+
+                        <tr>
+                            <td>
+                                <div style="display:flex; align-items:center; gap:10px;">
+
+                                    {% if book['image_url'] %}
+                                    <img src="{{ book['image_url'] }}" alt="{{ book['title'] }}"
+                                        class="book-list-cover">
+                                    {% else %}
+                                    <div class="book-placeholder">
+                                        📚
+                                    </div>
+                                    {% endif %}
+
+
+
+                                    <strong>{{ book['title'] }}</strong>
+
+                                </div>
+                            </td>
+
+                            <td>{{ book['author'] }}</td>
+
+                            <td>{{ book['issue_date'] }}</td>
+
+                            <td>{{ book['due_date'] }}</td>
+
+                            <td>{{ book['return_date'] or '-' }}</td>
+
+                            <td>₹{{ book['fine'] or 0 }}</td>
+
+                            <td>
+                                {% if book['status'] == 'issued' %}
+                                <span class="report-status issued">
+                                    Issued
+                                </span>
+                                {% elif book['status'] == 'returned' %}
+                                <span class="report-status returned">
+                                    Returned
+                                </span>
+                                {% else %}
+                                <span class="report-status">
+                                    {{ book['status'] }}
+                                </span>
+                                {% endif %}
+                            </td>
+
+                        </tr>
+
+                        {% else %}
+
+                        <tr>
+                            <td colspan="7" style="text-align:center;">
+                                No borrowing history found.
+                            </td>
+                        </tr>
+
+                        {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

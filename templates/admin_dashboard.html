@@ -1,0 +1,143 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Library - Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+
+        <h2>📚 Smart Library</h2>
+
+        <a href="{{ url_for('admin_dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('add_book') }}">➕ Add Book</a>
+        <a href="{{ url_for('search_books') }}">🔍 Search Books</a>
+        <a href="{{ url_for('view_students') }}">👨‍🎓 View Students</a>
+        <a href="{{ url_for('admin_requests') }}">📋 Manage Requests</a>
+        <a href="{{ url_for('admin_reports') }}">📊 Reports</a>
+        <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
+
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+
+        <div class="admin-welcome">
+
+            <div>
+                <h1>📊 Admin Dashboard</h1>
+
+                <h3>Welcome, {{ session['name'] }}!</h3>
+
+                <p>Manage your Smart Library activities from one place.</p>
+            </div>
+
+        </div>
+
+        <!-- Flash Messages -->
+        {% with messages = get_flashed_messages() %}
+            {% for message in messages %}
+                <p class="message">{{ message }}</p>
+            {% endfor %}
+        {% endwith %}
+
+        <!-- Statistics -->
+        <h2 class="dashboard-section-title">
+            Library Overview
+        </h2>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h3>📚 Total Books</h3>
+                <h2>{{ total_books }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>📖 Available Copies</h3>
+                <h2>{{ available_books }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>👨‍🎓 Total Students</h3>
+                <h2>{{ total_students }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>📕 Issued Books</h3>
+                <h2>{{ issued_books }}</h2>
+            </div>
+
+            <div class="stat-card">
+                <h3>⏳ Pending Requests</h3>
+                <h2>{{ pending_requests }}</h2>
+            </div>
+
+        </div>
+
+        <!-- Management Actions -->
+        <div class="book-section admin-management">
+
+            <h2>⚙️ Book Management</h2>
+
+            <div class="admin-actions">
+
+                <a href="{{ url_for('add_book') }}"
+                   class="admin-action-card">
+                    <span>➕</span>
+                    <strong>Add New Book</strong>
+                    <small>Add books to the library collection.</small>
+                </a>
+
+                <a href="{{ url_for('search_books') }}"
+                   class="admin-action-card">
+                    <span>🔍</span>
+                    <strong>Search Books</strong>
+                    <small>Find and manage library books.</small>
+                </a>
+
+            </div>
+
+            <h2>🏛️ Library Management</h2>
+
+            <div class="admin-actions">
+
+                <a href="{{ url_for('view_students') }}"
+                   class="admin-action-card">
+                    <span>👨‍🎓</span>
+                    <strong>View Students</strong>
+                    <small>View registered student information.</small>
+                </a>
+
+                <a href="{{ url_for('admin_requests') }}"
+                   class="admin-action-card">
+                    <span>📋</span>
+                    <strong>Manage Requests</strong>
+                    <small>Approve or reject borrowing requests.</small>
+                </a>
+
+                <a href="{{ url_for('admin_reports') }}"
+                   class="admin-action-card">
+                    <span>📊</span>
+                    <strong>View Reports</strong>
+                    <small>Check library activities and reports.</small>
+                </a>
+
+            </div>
+
+        </div>
+
+        <footer class="dashboard-footer">
+            © 2026 Smart Library | Admin Dashboard
+        </footer>
+
+    </div>
+
+</body>
+</html>

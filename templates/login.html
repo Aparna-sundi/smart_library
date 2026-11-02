@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Library Login</title>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <h1>📚 Smart Library</h1>
+    <h2>Welcome Back!</h2>
+    <p>Login to your library account</p>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <input type="email"
+               name="email"
+               placeholder="Enter Email"
+               required>
+
+        <input type="password"
+               name="password"
+               placeholder="Enter Password"
+               required>
+
+        <button type="submit">Login</button>
+
+    </form>
+
+    <p>New Student?
+        <a href="{{ url_for('auth.register') }}">
+            Register Here
+        </a>
+    </p>
+
+    <a href="/">Back to Home</a>
+
+</div>
+
+</body>
+</html>

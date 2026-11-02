@@ -1,0 +1,73 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Wishlist - Smart Library</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <div class="wishlist-container">
+
+        <h1>❤️ My Wishlist</h1>
+        <p>Your saved books are listed below.</p>
+
+        {% if books %}
+
+            <div class="wishlist-grid">
+
+                {% for book in books %}
+
+                    <div class="wishlist-card">
+
+                        {% if book['image_url'] %}
+                            <img src="{{ book['image_url'] }}"
+                                 alt="{{ book['title'] }}">
+                        {% endif %}
+
+                        <h3>{{ book['title'] }}</h3>
+
+                        <p>Author: {{ book['author'] }}</p>
+
+                        <p>Category: {{ book['category'] }}</p>
+
+                        <a href="{{ url_for('book_details',
+                                           book_id=book['id']) }}">
+                            View Book Details
+                        </a>
+
+                        <form method="POST"
+                              action="{{ url_for('remove_from_wishlist',
+                                                 book_id=book['id']) }}">
+
+                            <button type="submit">
+                                Remove from Wishlist
+                            </button>
+
+                        </form>
+
+                    </div>
+
+                {% endfor %}
+
+            </div>
+
+        {% else %}
+
+            <h3>Your wishlist is empty.</h3>
+            <p>Browse books and add your favourites!</p>
+
+        {% endif %}
+
+        <a href="{{ url_for('student_books') }}">
+            ← Back to Browse Books
+        </a>
+
+    </div>
+
+</body>
+</html>

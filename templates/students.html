@@ -1,0 +1,48 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registered Students</title>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+<div class="main-content">
+
+    <h1>Registered Students</h1>
+
+    <div class="table-container">
+    <table>
+
+        <tr>
+            <th>ID</th>
+            <th>Student Name</th>
+            <th>Email</th>
+        </tr>
+
+        {% for student in students %}
+        <tr>
+            <td>{{ student['id'] }}</td>
+            <td>{{ student['name'] }}</td>
+            <td>{{ student['email'] }}</td>
+        </tr>
+
+        {% else %}
+        <tr>
+            <td colspan="3">No students registered yet.</td>
+        </tr>
+        {% endfor %}
+
+    </table>
+    </div>
+
+    <a href="{{ url_for('admin_dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

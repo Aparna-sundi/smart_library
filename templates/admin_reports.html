@@ -1,0 +1,149 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Library - Admin Reports</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="reports-body">
+
+<div class="reports-container">
+
+    <!-- Header -->
+    <div class="reports-header">
+        <div>
+            <h1>📊 Admin Reports</h1>
+            <p>Smart Library | Borrowing and Transaction Overview</p>
+        </div>
+        <div class="reports-actions">
+
+    <a href="{{ url_for('download_admin_report') }}"
+       class="report-download-btn">
+        ⬇ Download PDF Report
+    </a>
+
+    <a href="{{ url_for('admin_dashboard') }}"
+       class="report-back-btn">
+        ← Back to Dashboard
+    </a>
+
+</div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="reports-summary">
+
+        <div class="report-card issued-card">
+            <div class="report-icon">📚</div>
+            <h3>Total Issued</h3>
+            <h2>{{ total_issued }}</h2>
+            <p>Books issued to students</p>
+        </div>
+
+        <div class="report-card returned-card">
+            <div class="report-icon">✅</div>
+            <h3>Total Returned</h3>
+            <h2>{{ total_returned }}</h2>
+            <p>Books returned successfully</p>
+        </div>
+
+        <div class="report-card overdue-card">
+            <div class="report-icon">⏰</div>
+            <h3>Overdue Books</h3>
+            <h2>{{ total_overdue }}</h2>
+            <p>Books past their due date</p>
+        </div>
+
+        <div class="report-card fine-card">
+            <div class="report-icon">💰</div>
+            <h3>Fines Collected</h3>
+            <h2>₹{{ total_fines }}</h2>
+            <p>Total fines received</p>
+        </div>
+
+    </div>
+
+    <!-- Borrowing Records -->
+    <div class="reports-table-section">
+
+        <div class="table-heading">
+            <div>
+                <h2>Student Borrowing Records</h2>
+                <p>Complete details of student book transactions</p>
+            </div>
+        </div>
+
+        <div class="report-table-wrapper">
+
+            <table class="report-table">
+
+                <thead>
+                    <tr>
+                        <th>Student</th>
+                        <th>Email</th>
+                        <th>Book</th>
+                        <th>Issue Date</th>
+                        <th>Due Date</th>
+                        <th>Return Date</th>
+                        <th>Fine</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for r in records %}
+                    <tr>
+                        <td class="student-name">{{ r.name }}</td>
+                        <td>{{ r.email }}</td>
+                        <td class="book-name">{{ r.title }}</td>
+                        <td>{{ r.issue_date }}</td>
+                        <td>{{ r.due_date }}</td>
+                        <td>{{ r.return_date or '-' }}</td>
+                        <td>₹{{ r.fine or 0 }}</td>
+
+                        <td>
+                            {% if r.status == 'issued' %}
+                                <span class="report-status issued">
+                                    Issued
+                                </span>
+                            {% elif r.status == 'returned' %}
+                                <span class="report-status returned">
+                                    Returned
+                                </span>
+                            {% else %}
+                                <span class="report-status">
+                                    {{ r.status }}
+                                </span>
+                            {% endif %}
+                        </td>
+                    </tr>
+
+                    {% else %}
+                    <tr>
+                        <td colspan="8" class="no-records">
+                            No borrowing records available.
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <div class="reports-footer">
+        Smart Library | Admin Report Management
+    </div>
+
+</div>
+
+</body>
+</html>

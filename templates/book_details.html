@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Book Details - Smart Library</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+    <div class="sidebar">
+        <h2>📚 Smart Library</h2>
+        <a href="{{ url_for('student_dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('student_books') }}">📖 Browse Books</a>
+        <a href="{{ url_for('my_requests') }}">📋 My Requests</a>
+        <a href="{{ url_for('issued_books') }}">📚 My Issued Books</a>
+        <a href="{{ url_for('student_profile') }}">👤 My Profile</a>
+        <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
+    </div>
+
+    <div class="main-content">
+
+        <h1>📖 Book Details</h1>
+
+        <div class="book-section">
+
+            <h2>📖 {{ book['title'] }}</h2>
+            {% if book['image_url'] %}
+            <img src="{{ book['image_url'] }}" alt="{{ book['title'] }} Cover" class="book-cover">
+            {% else %}
+            <p>No book cover available.</p>
+            {% endif %}
+            <p><strong>Book ID:</strong> {{ book['id'] }}</p>
+            <p><strong>Author:</strong> {{ book['author'] }}</p>
+            <p><strong>Category:</strong> {{ book['category'] }}</p>
+
+            <p><strong>Description:</strong></p>
+            <p>{{ book['description'] or 'No description available.' }}</p>
+
+            <p><strong>ISBN:</strong> {{ book['isbn'] or 'Not provided' }}</p>
+            <p><strong>Total Copies:</strong> {{ book['quantity'] }}</p>
+            <p><strong>Available Copies:</strong> {{ book['available'] }}</p>
+            <!-- Book Availability Status -->
+            <p>
+                <strong>Book Status:</strong>
+
+                {% if book['available'] == 0 %}
+                <span class="status-unavailable">Out of Stock</span>
+
+                {% elif book['available'] <= 2 %} <span class="status-limited">Limited Copies</span>
+
+                    {% else %}
+                    <span class="status-available">Available</span>
+                    {% endif %}
+            </p>
+            <!-- Book QR Code -->
+            <div class="qr-section">
+                <h3>📱 Scan Book QR Code</h3>
+
+                <img src="{{ url_for('static', filename='qr_codes/book_' ~ book['id'] ~ '.png') }}"
+                    alt="QR Code for {{ book['title'] }}" width="180">
+
+                <p>Scan this QR code to view book details.</p>
+            </div>
+            <a href="{{ url_for('static', filename='qr_codes/book_' ~ book['id'] ~ '.png') }}"
+                download="book_{{ book['id'] }}_qr.png">
+                <button type="button">⬇ Download QR Code</button>
+            </a>
+            
+<!-- Add to Wishlist -->
+
+<div class="wishlist-action">
+    <form method="POST"
+          action="{{ url_for('add_to_wishlist', book_id=book['id']) }}">
+
+        <button type="submit">
+            ❤️ Add to Wishlist
+        </button>
+
+    </form>
+</div>
+
+<!-- Request This Book -->
+
+{% if book['available'] > 0 %}
+
+    <form method="POST"
+          action="{{ url_for('request_book', book_id=book['id']) }}">
+
+        <button type="submit">
+            Request This Book
+        </button>
+
+    </form>
+
+{% else %}
+
+    <p>Currently unavailable.</p>
+
+{% endif %}
+
+
+            <br>
+
+            <hr>
+
+            <!-- Book Rating and Review -->
+
+            <div class="review-section">
+
+                <h2>⭐ Rate and Review This Book</h2>
+
+                <form method="POST" action="{{ url_for('submit_review', book_id=book['id']) }}">
+
+                    <label>Give Your Rating:</label>
+
+                    <select name="rating" required>
+                        <option value="">Select Rating</option>
+                        <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                        <option value="4">⭐⭐⭐⭐ - Very Good</option>
+                        <option value="3">⭐⭐⭐ - Good</option>
+                        <option value="2">⭐⭐ - Average</option>
+                        <option value="1">⭐ - Poor</option>
+                    </select>
+
+                    <br><br>
+
+                    <label>Write Your Review:</label>
+
+                    <textarea name="review" rows="4" placeholder="Share your experience about this book..."
+                        required></textarea>
+
+                    <br><br>
+
+                    <button type="submit">Submit Review</button>
+
+                </form>
+
+            </div>
+
+<hr>
+
+<!-- Average Book Rating -->
+
+<div class="reviews-display">
+
+    <h2>⭐ Book Ratings and Reviews</h2>
+
+    <h3>Average Rating:
+        {% if total_reviews > 0 %}
+            {{ "%.1f"|format(average_rating) }} / 5
+        {% else %}
+            No ratings yet
+        {% endif %}
+    </h3>
+
+    <p>Total Reviews: {{ total_reviews }}</p>
+
+    <hr>
+
+    {% for review in reviews %}
+
+        <div class="review-card">
+
+            <h4>{{ review['student_name'] }}</h4>
+
+            <p>
+                Rating:
+                {% for star in range(review['rating']) %}
+                    ⭐
+                {% endfor %}
+            </p>
+
+            <p>{{ review['review'] }}</p>
+
+            <small>{{ review['created_at'] }}</small>
+
+        </div>
+
+        <hr>
+
+    {% else %}
+
+        <p>No reviews yet. Be the first to review this book!</p>
+
+    {% endfor %}
+
+</div>
+
+            <a href="{{ url_for('student_books') }}">
+                ← Back to Browse Books
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

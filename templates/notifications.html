@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>My Notifications - Smart Library</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+<div class="main-content">
+
+    <h1>🔔 My Notifications</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    {% if notifications %}
+
+        {% for notification in notifications %}
+
+            <div class="notification-card">
+
+                <p>{{ notification['message'] }}</p>
+
+                <small>
+                    {{ notification['created_at'] }}
+                </small>
+
+                {% if notification['is_read'] == 0 %}
+
+                    <span class="status-limited">
+                        Unread
+                    </span>
+
+                    <form method="POST"
+                          action="{{ url_for(
+                              'mark_notification_read',
+                              notification_id=notification['id']
+                          ) }}">
+
+                        <button type="submit">
+                            Mark as Read
+                        </button>
+
+                    </form>
+
+                {% else %}
+
+                    <span class="status-available">
+                        Read
+                    </span>
+
+                {% endif %}
+
+            </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <h3>No notifications yet.</h3>
+        <p>Your library updates will appear here.</p>
+
+    {% endif %}
+
+    <a href="{{ url_for('student_dashboard') }}">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

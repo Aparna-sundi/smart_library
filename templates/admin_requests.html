@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Book Requests</title>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+<div class="main-content">
+
+    <h1>Student Borrow Requests</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="table-container">
+
+    <table>
+
+        <tr>
+            <th>Request ID</th>
+            <th>Student</th>
+            <th>Email</th>
+            <th>Book</th>
+            <th>Request Date</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for item in requests %}
+
+        <tr>
+            <td>{{ item['id'] }}</td>
+            <td>{{ item['name'] }}</td>
+            <td>{{ item['email'] }}</td>
+            <td>{{ item['title'] }}</td>
+            <td>{{ item['request_date'] }}</td>
+            <td>{{ item['status'] }}</td>
+
+            <td>
+
+                {% if item['status'] == 'pending' %}
+
+                <form method="POST"
+                      action="{{ url_for(
+                          'process_request',
+                          request_id=item['id'],
+                          action='approve'
+                      ) }}">
+
+                    <button type="submit">
+                        Approve
+                    </button>
+
+                </form>
+
+                <form method="POST"
+                      action="{{ url_for(
+                          'process_request',
+                          request_id=item['id'],
+                          action='reject'
+                      ) }}">
+
+                    <button type="submit"
+                            class="delete-btn">
+                        Reject
+                    </button>
+
+                </form>
+
+                {% else %}
+
+                    Processed
+
+                {% endif %}
+
+            </td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td colspan="7">No requests available.</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    </div>
+
+    <a href="{{ url_for('admin_dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,21 @@
+# Python virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Local environment files
+.env
+.env.*
+!.env.example
+
+# Local database and generated files
+smart_library.db
+*.sqlite3
+static/qr_codes/*.png
+
+# Editor / OS files
+.vscode/
+.DS_Store

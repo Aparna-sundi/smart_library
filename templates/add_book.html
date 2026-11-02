@@ -1,0 +1,72 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add New Book</title>
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <h1>📚 Smart Library</h1>
+    <h2>Add New Book</h2>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <form method="POST">
+
+        <input type="text"
+               name="title"
+               placeholder="Book Title"
+               required>
+
+        <input type="text"
+               name="author"
+               placeholder="Author Name"
+               required>
+
+        <input type="text"
+               name="category"
+               placeholder="Book Category">
+
+        <input type="text"
+               name="isbn"
+               placeholder="ISBN (Optional)">
+
+        <label>Book Description (Optional)</label>
+
+        <textarea name="description"
+                  placeholder="Enter book description"
+                  rows="4"></textarea>
+
+        <label>Book Cover Image URL (Optional)</label>
+
+        <input type="url"
+               name="image_url"
+               placeholder="Paste book cover image URL">
+
+        <input type="number"
+               name="quantity"
+               placeholder="Quantity"
+               min="1"
+               required>
+
+        <button type="submit">Add Book</button>
+
+    </form>
+
+    <a href="{{ url_for('admin_dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

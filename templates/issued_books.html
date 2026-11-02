@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>My Issued Books</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+    <div class="main-content">
+
+        <h1>My Books and History</h1>
+
+        {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+        <p class="message">{{ message }}</p>
+        {% endfor %}
+        {% endwith %}
+
+        <div class="table-container">
+
+            <table>
+
+                <tr>
+                    <th>Book Title</th>
+                    <th>Author</th>
+                    <th>Issue Date</th>
+                    <th>Due Date</th>
+                    <th>Reminder</th>
+                    <th>Return Date</th>
+                    <th>Fine</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+
+                {% for item in transactions %}
+
+                <tr>
+                    <td>{{ item['title'] }}</td>
+                    <td>{{ item['author'] }}</td>
+                    <td>{{ item['issue_date'] }}</td>
+                    <td>{{ item['due_date'] }}</td>
+                    <td>
+                        {% if item['status'] == 'issued' %}
+                        {% if item['reminder_status'] == 'Overdue' %}
+                        <span class="status-unavailable">Overdue</span>
+                        {% elif item['reminder_status'] == 'Due Today' %}
+                        <span class="status-unavailable">Due Today</span>
+                        {% elif item['reminder_status'] == 'Due Soon' %}
+                        <span class="status-limited">Due Soon</span>
+                        {% else %}
+                        <span class="status-available">On Time</span>
+                        {% endif %}
+                        {% else %}
+                        -
+                        {% endif %}
+                    </td>
+                    <td>{{ item['return_date'] or '-' }}</td>
+                    <td>₹{{ item['fine'] }}</td>
+                    <td>{{ item['status'] }}</td>
+
+                    <td>
+
+                        {% if item['status'] == 'issued' %}
+
+                        <form method="POST" action="{{ url_for(
+                          'return_book',
+                          transaction_id=item['id']
+                      ) }}" onsubmit="return confirm(
+                          'Are you sure you want to return this book?'
+                      )">
+
+                            <button type="submit">
+                                Return
+                            </button>
+
+                        </form>
+
+                        {% else %}
+                        Returned
+                        {% endif %}
+
+                    </td>
+                </tr>
+
+                {% else %}
+
+                <tr>
+                    <td colspan="9">No borrowing history found.</td>
+                </tr>
+
+                {% endfor %}
+
+            </table>
+
+        </div>
+
+        <a href="{{ url_for('student_dashboard') }}">
+            Back to Dashboard
+        </a>
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,63 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Book Requests</title>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body class="dashboard-body">
+
+<div class="main-content">
+
+    <h1>My Book Requests</h1>
+
+    {% with messages = get_flashed_messages() %}
+        {% for message in messages %}
+            <p class="message">{{ message }}</p>
+        {% endfor %}
+    {% endwith %}
+
+    <div class="table-container">
+
+    <table>
+
+        <tr>
+            <th>Request ID</th>
+            <th>Book Title</th>
+            <th>Author</th>
+            <th>Request Date</th>
+            <th>Status</th>
+        </tr>
+
+        {% for item in requests %}
+
+        <tr>
+            <td>{{ item['id'] }}</td>
+            <td>{{ item['title'] }}</td>
+            <td>{{ item['author'] }}</td>
+            <td>{{ item['request_date'] }}</td>
+            <td>{{ item['status'] }}</td>
+        </tr>
+
+        {% else %}
+
+        <tr>
+            <td colspan="5">No requests found.</td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    </div>
+
+    <a href="{{ url_for('student_dashboard') }}">
+        Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>

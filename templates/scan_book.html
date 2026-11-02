@@ -1,0 +1,97 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Scan Book QR - Smart Library</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://unpkg.com/html5-qrcode"></script>
+</head>
+
+<body class="dashboard-body">
+
+    <div class="sidebar">
+        <h2>📚 Smart Library</h2>
+        <a href="{{ url_for('student_dashboard') }}">🏠 Dashboard</a>
+        <a href="{{ url_for('student_books') }}">📖 Browse Books</a>
+        <a href="{{ url_for('my_requests') }}">📋 My Requests</a>
+        <a href="{{ url_for('issued_books') }}">📚 My Issued Books</a>
+        <a href="{{ url_for('student_profile') }}">👤 My Profile</a>
+        <a href="{{ url_for('auth.logout') }}">🚪 Logout</a>
+    </div>
+
+    <div class="main-content">
+
+        <h1>📱 Scan Book QR Code</h1>
+
+        <div class="book-section">
+
+            <h3>Scan the QR code to view book details</h3>
+
+            <div id="reader" style="width: 100%; max-width: 450px;"></div>
+
+            <p id="scan-result">
+                Camera scanner is ready.
+            </p>
+
+            <button onclick="startScanner()">
+                Start Scanner
+            </button>
+
+            <button onclick="stopScanner()">
+                Stop Scanner
+            </button>
+
+        </div>
+
+    </div>
+
+    <script>
+        let html5QrCode = null;
+
+        function startScanner() {
+
+            html5QrCode = new Html5Qrcode("reader");
+
+            html5QrCode.start(
+                { facingMode: "environment" },
+                {
+                    fps: 10,
+                    qrbox: { width: 250, height: 250 }
+                },
+                function(decodedText) {
+
+                    document.getElementById("scan-result").innerText =
+                        "QR Code detected! Opening book details...";
+
+                    html5QrCode.stop().then(function() {
+                        window.location.href = decodedText;
+                    });
+
+                },
+                function(errorMessage) {
+                    // Waiting for QR code detection
+                }
+            ).catch(function(error) {
+                document.getElementById("scan-result").innerText =
+                    "Camera error: " + error;
+            });
+        }
+
+        function stopScanner() {
+
+            if (html5QrCode) {
+                html5QrCode.stop().then(function() {
+                    document.getElementById("scan-result").innerText =
+                        "Scanner stopped.";
+                }).catch(function(error) {
+                    console.log(error);
+                });
+            }
+        }
+    </script>
+
+</body>
+</html>

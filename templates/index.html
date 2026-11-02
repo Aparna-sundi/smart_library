@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Smart Library</title>
+    <link rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+<div class="auth-container">
+
+    <h1>📚 Smart Library</h1>
+
+    <h2>Welcome to Digital Library</h2>
+
+    <p>Search, Borrow and Manage Books Easily.</p>
+
+    <a href="{{ url_for('auth.login') }}">
+        <button>Login</button>
+    </a>
+
+    <a href="{{ url_for('auth.register') }}">
+        <button>Student Registration</button>
+    </a>
+
+</div>
+
+</body>
+</html>
